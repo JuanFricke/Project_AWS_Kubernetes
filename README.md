@@ -1,5 +1,5 @@
 
-# ☁️ Projeto Final do Programa de Bolsas da Compass UOL | AWS e DevSecOps
+# ☁️ Projeto Final do Programa de Bolsas da Compass UOL | AWS e DevSecOps - Infraestrutura AWS para um eCommerce da Fast Engineering
 
 ## 📋 Integrantes do Projeto
 - Nome do Integrante 1
