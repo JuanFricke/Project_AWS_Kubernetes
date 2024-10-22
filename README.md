@@ -27,8 +27,6 @@ Atualmente, o ambiente on-premise consiste em:
 
 A solução de migração envolve a implementação de uma arquitetura na AWS, projetada para garantir alta disponibilidade, escalabilidade e segurança.
 
-![Diagrama da Arquitetura](link_para_diagrama_arquitetura.png) <!-- Substitua pelo link do diagrama final -->
-
 ### **Descrição da Nova Arquitetura:**
 
 1. **Usuário acessa o site do e-commerce da Fast Engineering** através do serviço **AWS Route 53**, que faz o roteamento do tráfego DNS.
@@ -37,7 +35,7 @@ A solução de migração envolve a implementação de uma arquitetura na AWS, p
    
 3. O conteúdo estático (como fotos e links) será distribuído globalmente utilizando **Amazon CloudFront** para reduzir a latência e melhorar a experiência do usuário.
    
-4. O tráfego chega a um **Load Balancer (Elastic Load Balancer - ELB)**, que distribui as solicitações para os containers e microsserviços.
+4. O tráfego chega a um **Load Balancer (Aplication Load Balancer - ALB)**, que distribui as solicitações para os containers e microsserviços.
 
 5. **Aplicação em Containers gerenciados pelo EKS (Elastic Kubernetes Service)** utilizando **AWS Fargate**. 
     - **Pods rodando o front-end (React)**.
@@ -59,29 +57,29 @@ A solução de migração envolve a implementação de uma arquitetura na AWS, p
 
 ## 🧰 **Serviços e Recursos Usados na Arquitetura**
 
-1. **AWS Route 53**: Gerencia o tráfego DNS e direciona os usuários para a aplicação.
+1. **AWS Route 53**: Serviço de gerenciamento de DNS que permite o roteamento de usuários para diferentes recursos da AWS com base em regras definidas, como a proximidade geográfica ou saúde do serviço.
    
-2. **AWS WAF (Web Application Firewall)**: Proporciona segurança contra ameaças da web, como ataques DDoS e injeções de SQL.
-   
-3. **Amazon CloudFront**: Distribui globalmente os conteúdos estáticos da aplicação, diminuindo a latência.
+2. **AWS WAF (Web Application Firewall)**: de aplicação da web que protege contra ameaças comuns da internet, como injeção de SQL, cross-site scripting (XSS), e ataques DDoS.
 
-4. **Elastic Load Balancer (ELB)**: Balanceia a carga entre as instâncias de aplicação, garantindo alta disponibilidade.
+3. **Amazon CloudFront**:  Serviço de distribuição de conteúdo (CDN) que acelera a entrega de conteúdo estático ou dinâmico em todo o mundo, reduzindo a latência para os usuários finais.
 
-5. **Amazon EKS (Elastic Kubernetes Service)**: Serviço gerenciado de Kubernetes, utilizado para orquestração dos containers da aplicação e do web server.
+4. **Aplication Load Balancer (ALB)**: Balanceador de carga que distribui o tráfego entre diferentes instâncias ou containers, garantindo que o tráfego seja equilibrado e as falhas sejam redirecionadas para instâncias saudáveis.
 
-6. **AWS Fargate**: Serviço de containers serverless, que executa os pods de aplicação sem a necessidade de gerenciar servidores.
+5. **Amazon EKS (Elastic Kubernetes Service)**: Serviço gerenciado de Kubernetes que orquestra containers, permitindo escalabilidade, automação e implantação rápida de aplicações em microsserviços.
 
-7. **Amazon S3**: Armazena os arquivos estáticos como imagens, vídeos e documentos de forma escalável e segura.
+6. **AWS Fargate**: Serviço de execução de containers serverless que elimina a necessidade de provisionar e gerenciar servidores. Com Fargate, os containers são executados sob demanda.
 
-8. **Amazon EFS (Elastic File System)**: Sistema de arquivos elástico, compartilhado entre os pods de web server.
+7. **Amazon S3 (Simple Storage Service)**: Serviço de armazenamento escalável e seguro que permite armazenar arquivos estáticos, como imagens e vídeos, com alta durabilidade e acessibilidade.
 
-9. **Amazon RDS (MySQL)**: Banco de dados gerenciado, com configuração Multi-AZ para alta disponibilidade e escalabilidade.
+8. **Amazon EFS (Elastic File System)**: Sistema de arquivos compartilhado que permite que várias instâncias ou containers acessem o mesmo sistema de arquivos simultaneamente, ideal para cenários onde há compartilhamento de dados.
 
-10. **AWS CodePipeline e AWS CodeDeploy**: Ferramentas de CI/CD para automação de deploys e integração contínua.
+9. **Amazon RDS (MySQL)**: Banco de dados relacional gerenciado que permite a configuração de alta disponibilidade (Multi-AZ) e backups automáticos para garantir redundância e recuperação rápida em caso de falhas.
 
-11. **AWS CloudWatch**: Monitora métricas dos recursos e serviços da AWS, enviando alertas em caso de falhas ou picos de uso.
+10. **AWS CodePipeline e AWS CodeDeploy**: Serviços de integração contínua (CI) e entrega contínua (CD) que automatizam os processos de build, teste e deploy da aplicação.
 
-12. **AWS IAM (Identity and Access Management)**: Gerenciamento de identidades e permissões para acesso seguro aos recursos AWS.
+11. **AWS CloudWatch**: Serviço de monitoramento que coleta e rastreia métricas, registros e eventos da AWS, enviando alertas e permitindo o acompanhamento da saúde e performance da infraestrutura.
+
+12. **AWS IAM (Identity and Access Management)**: Serviço de gerenciamento de identidades que permite definir permissões granulares para acessar e gerenciar recursos da AWS de forma segura.
 
 ---
 
