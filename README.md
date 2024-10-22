@@ -1,4 +1,3 @@
-
 # ☁️ Projeto Final do Programa de Bolsas da Compass UOL | AWS e DevSecOps - Infraestrutura AWS para um eCommerce da Fast Engineering
 
 ## 📋 Integrantes do Projeto
@@ -175,14 +174,14 @@ Após configurar todos os recursos acima, o pipeline de CI/CD garantirá que o c
 
 ### Estimativa de custo da nova arquitetura
 
-- [Link da Calculadora AWS](https://calculator.aws/#/estimate?id=cf02f0d188b218a00ee663355aba75d98ef7cbce)
+- [Link da Calculadora AWS](https://calculator.aws/#/estimate?id=eddd7d07382facf5f41f637a4d8dfc3b31f629a5)
 
 <img src="/imgs/princing_calculator.png">
 Estimativa de custo da nova arquitetura
 
-- Custo mensal: 1.721,68 USD
+- Custo mensal: 2.016,31 USD
 
-- Custo total de 12 meses: 20.660,16 USD
+- Custo total de 12 meses: 24.195,72 USD
 
 ---
 
