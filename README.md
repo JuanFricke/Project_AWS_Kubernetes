@@ -19,7 +19,8 @@ Atualmente, o ambiente on-premise consiste em:
 - **1 servidor para aplicação (React)**
 - **1 servidor de Web Server**, que também armazena arquivos estáticos como fotos e links.
 
-<img src="/imgs/arquitetura_atual.png">
+<img src="/imgs/arq_atual.png">
+Arquitetura atual da Fast Engineering
 
 ---
 
@@ -39,7 +40,10 @@ A solução de migração envolve a implementação de uma arquitetura na AWS, p
 
 5. **Aplicação em Containers gerenciados pelo EKS (Elastic Kubernetes Service)** utilizando **AWS Fargate**. 
     - **Pods rodando o front-end (React)**.
-    - **Pods rodando um Web Server (Nginx)** para os arquivos estáticos que estarão armazenados em **Amazon S3** e compartilhados com **Amazon EFS** (Elastic File System).
+    - **Pods rodando um Web Server (Nginx)**
+    - **Pods rodando a conexão com DB conection**
+    - **Pods rodando a conexão com S3 e EFS conection**
+    - **Pods rodando coleta dos logs**
 
 6. O banco de dados será migrado para **Amazon RDS (MySQL)** com configuração de Multi-AZ, garantindo alta disponibilidade e backups automáticos.
 
@@ -49,9 +53,11 @@ A solução de migração envolve a implementação de uma arquitetura na AWS, p
 
 9. O gerenciamento de permissões será feito com **AWS IAM** para garantir segurança e controle de acessos.
 
-<img src="/imgs/arquitetura_aws.png">
+<img src="/imgs/arq_aws.png">
+Arquitetura da Fast Engineering na AWS
 
-<img src="/imgs/arquitetura_kubernetes.png">
+<img src="/imgs/arq_kubernetes.png">
+Arquitetura interna do kubernetes
 
 ---
 
@@ -83,9 +89,100 @@ A solução de migração envolve a implementação de uma arquitetura na AWS, p
 
 ---
 
+## 🔧 **Implantação**
+
+### Pré-requisitos
+
+1. **Conta AWS configurada**
+2. **AWS CLI** instalado e configurado
+3. **kubectl** configurado para acessar seu cluster EKS
+4. **IAM roles** com permissões adequadas
+5. **Docker** instalado para construir as imagens
+
+### 1. Configuração do Repositório e CI/CD
+
+#### 1.1. Criar Repositório no AWS CodeCommit
+- Acesse o AWS Console, navegue até o **CodeCommit** e crie um novo repositório.
+- Clone o repositório em sua máquina local:
+  ```bash
+  git clone https://git-codecommit.REGION.amazonaws.com/v1/repos/NOME_DO_REPOSITORIO
+  ```
+
+#### 1.2. Definir Pipeline no AWS CodePipeline
+- Navegue para o **CodePipeline** e crie um novo pipeline.
+- Escolha o repositório CodeCommit criado anteriormente como fonte.
+- Configure as fases de **CodeBuild** para construir o frontend e o backend e **CodeDeploy** para implantar as imagens no cluster EKS.
+
+#### 1.3. Configurar CodeBuild
+- Crie um **buildspec.yml** para definir as etapas de construção de cada componente.
+
+### 2. Configuração do EKS e Fargate
+
+#### 2.1. Criar Cluster EKS
+- Use o **eksctl** para criar o cluster EKS com suporte a Fargate.
+  ```bash
+  eksctl create cluster     --name ecommerce-cluster     --region us-east-1     --fargate
+  ```
+
+#### 2.2. Configurar Fargate Profiles
+- Crie um profile Fargate para associar seus pods ao serviço Fargate.
+  ```bash
+  eksctl create fargateprofile     --cluster ecommerce-cluster     --name ecommerce-app     --namespace default
+  ```
+
+#### 2.3. Deploy dos Serviços no EKS
+- Crie arquivos **YAML** para definir os serviços do Kubernetes (Deployment, Service, ConfigMap, etc.).
+- Arquivo `deployment-backend.yaml` para o servidor web:
+- Para aplicar o deployment:
+  ```bash
+  kubectl apply -f deployment-backend.yaml
+  ```
+
+### 3. Configuração do Banco de Dados RDS MySQL
+
+#### 3.1. Criar Instância RDS
+- Acesse o console RDS e crie uma nova instância MySQL.
+  - Escolha a versão MySQL adequada.
+  - Configure as VPCs, subnets e segurança para permitir a comunicação com o EKS.
+- Configure o endpoint do banco de dados no arquivo de configuração da aplicação.
+
+#### 3.2. Configurar Variáveis de Ambiente
+- No seu arquivo de configuração **ConfigMap** ou diretamente no deployment:
+
+### 4. Configuração do S3 e EFS
+
+#### 4.1. Criar Bucket no S3
+- Crie um bucket no **S3** para armazenar arquivos estáticos e imagens do e-commerce.
+- No código da aplicação, use o SDK da AWS para interagir com o S3 e fazer upload/download dos arquivos.
+
+#### 4.2. Montar EFS no EKS
+- Crie um sistema de arquivos **EFS** no console da AWS.
+- Configure um **PersistentVolume** e um **PersistentVolumeClaim** no Kubernetes:
+
+### 5. Configuração de Logs e Monitoramento
+
+#### 5.1. Configurar CloudWatch Logs
+- Habilite o envio de logs dos containers no EKS para o **CloudWatch**.
+- Adicione a seguinte configuração nos deployments:
+
+### 6. Finalizando a Implantação
+
+Após configurar todos os recursos acima, o pipeline de CI/CD garantirá que o código seja automaticamente construído, testado e implantado no cluster EKS. Cada alteração no repositório CodeCommit acionará o pipeline.
+
+---
+
 ## 💰 **Orçamento**
-<!-- Previsão de custos será detalhada após a migração -->
-A ser anexado.
+
+### Estimativa de custo da nova arquitetura
+
+- [Link da Calculadora AWS](https://calculator.aws/#/estimate)
+
+<img src="/imgs/princing_calculator.png">
+Estimativa de custo da nova arquitetura
+
+- Custo mensal: 1.721,68 USD
+
+- Custo total de 12 meses: 20.660,16 USD
 
 ---
 
