@@ -2,9 +2,11 @@
 # ☁️ Projeto Final do Programa de Bolsas da Compass UOL | AWS e DevSecOps - Infraestrutura AWS para um eCommerce da Fast Engineering
 
 ## 📋 Integrantes do Projeto
-- Nome do Integrante 1
-- Nome do Integrante 2
-- Nome do Integrante 3
+- Bruno Silveira: https://github.com/brunohsilv
+- Edilson Maria: https://github.com/EdilsonMaria
+- Felipe Santos: https://github.com/Felipe53650
+- Laura Capssa: https://github.com/laura-capssa
+- Juan paulo: https://github.com/juanfricke
 
 ---
 
@@ -16,6 +18,8 @@ Atualmente, o ambiente on-premise consiste em:
 - **1 servidor para Banco de Dados MySQL**
 - **1 servidor para aplicação (React)**
 - **1 servidor de Web Server**, que também armazena arquivos estáticos como fotos e links.
+
+<img src="/imgs/arquitetura_atual.png">
 
 ---
 
@@ -46,6 +50,10 @@ A solução de migração envolve a implementação de uma arquitetura na AWS, p
 8. **AWS CloudWatch** será configurado para monitorar a saúde dos serviços e enviar alertas sobre qualquer anomalia.
 
 9. O gerenciamento de permissões será feito com **AWS IAM** para garantir segurança e controle de acessos.
+
+<img src="/imgs/arquitetura_aws.png">
+
+<img src="/imgs/arquitetura_kubernetes.png">
 
 ---
 
