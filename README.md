@@ -175,7 +175,7 @@ Após configurar todos os recursos acima, o pipeline de CI/CD garantirá que o c
 
 ### Estimativa de custo da nova arquitetura
 
-- [Link da Calculadora AWS](https://calculator.aws/#/estimate)
+- [Link da Calculadora AWS](https://calculator.aws/#/estimate?id=cf02f0d188b218a00ee663355aba75d98ef7cbce)
 
 <img src="/imgs/princing_calculator.png">
 Estimativa de custo da nova arquitetura
