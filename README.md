@@ -1,197 +1,115 @@
-# ☁️ Projeto Final do Programa de Bolsas da Compass UOL | AWS e DevSecOps - Infraestrutura AWS para um eCommerce da Fast Engineering
+# ☁️ Final Project for Compass UOL Scholarship Program | AWS and DevSecOps - AWS Infrastructure for Fast Engineering eCommerce
 
-## 📋 Integrantes do Projeto
+## 📋 Project Members
 - Bruno Silveira: https://github.com/brunohsilv
 - Edilson Maria: https://github.com/EdilsonMaria
 - Felipe Santos: https://github.com/Felipe53650
 - Laura Capssa: https://github.com/laura-capssa
-- Juan paulo: https://github.com/juanfricke
+- Juan Paulo: https://github.com/juanfricke
 
 ---
 
 ## 🔎 **CASE:**
-A Fast Engineering S/A é uma empresa de e-commerce que está crescendo rapidamente. Desde o início do ano, os acessos e compras estão aumentando em 20% a cada mês. A arquitetura on-premise atual, composta por servidores dedicados para aplicação, web server e banco de dados, não suporta mais a alta demanda de acessos e compras. Diante disso, a solução encontrada foi migrar o ambiente para a nuvem AWS, garantindo escalabilidade, segurança e alta disponibilidade para o e-commerce.
+Fast Engineering S/A is a rapidly growing e-commerce company. Since the beginning of the year, access and purchases have been increasing by 20% each month. The current on-premise architecture, composed of dedicated servers for the application, web server, and database, can no longer support the high demand for access and purchases. Therefore, the chosen solution was to migrate the environment to AWS cloud, ensuring scalability, security, and high availability for the e-commerce platform.
 
-### **Arquitetura Atual**
-Atualmente, o ambiente on-premise consiste em:
-- **1 servidor para Banco de Dados MySQL**
-- **1 servidor para aplicação (React)**
-- **1 servidor de Web Server**, que também armazena arquivos estáticos como fotos e links.
+### **Current Architecture**
+Currently, the on-premise environment consists of:
+- **1 Database Server (MySQL)**
+- **1 Application Server (React)**
+- **1 Web Server**, which also stores static files like photos and links.
 
 <img src="/imgs/arq_atual.png">
-Arquitetura atual da Fast Engineering
+Current architecture of Fast Engineering
 
 ---
 
-## 🆕 **Nova Arquitetura em Cloud (AWS)**
+## 🆕 **New Cloud Architecture (AWS)**
 
-A solução de migração envolve a implementação de uma arquitetura na AWS, projetada para garantir alta disponibilidade, escalabilidade e segurança.
+The migration solution involves implementing an AWS architecture designed to ensure high availability, scalability, and security.
 
-### **Descrição da Nova Arquitetura:**
+### **New Architecture Description:**
 
-1. **Usuário acessa o site do e-commerce da Fast Engineering** através do serviço **AWS Route 53**, que faz o roteamento do tráfego DNS.
-   
-2. **AWS WAF** é utilizado para garantir a segurança, protegendo contra ataques e acessos maliciosos.
-   
-3. O conteúdo estático (como fotos e links) será distribuído globalmente utilizando **Amazon CloudFront** para reduzir a latência e melhorar a experiência do usuário.
-   
-4. O tráfego chega a um **Load Balancer (Aplication Load Balancer - ALB)**, que distribui as solicitações para os containers e microsserviços.
+1. **User accesses Fast Engineering's e-commerce site** via **AWS Route 53**, which handles DNS traffic routing.
 
-5. **Aplicação em Containers gerenciados pelo EKS (Elastic Kubernetes Service)** utilizando **AWS Fargate**. 
-    - **Pods rodando o front-end (React)**.
-    - **Pods rodando um Web Server (Nginx)**
-    - **Pods rodando a conexão com DB conection**
-    - **Pods rodando a conexão com S3 e EFS conection**
-    - **Pods rodando coleta dos logs**
+2. **AWS WAF** is used for security, protecting against malicious attacks and access.
 
-6. O banco de dados será migrado para **Amazon RDS (MySQL)** com configuração de Multi-AZ, garantindo alta disponibilidade e backups automáticos.
+3. Static content (such as photos and links) will be distributed globally using **Amazon CloudFront** to reduce latency and improve user experience.
 
-7. **AWS CodePipeline** e **AWS CodeDeploy** serão usados para a entrega contínua (CI/CD) da aplicação, garantindo automatização e eficiência nas atualizações.
+4. Traffic arrives at a **Load Balancer (Application Load Balancer - ALB)**, which distributes requests to containers and microservices.
 
-8. **AWS CloudWatch** será configurado para monitorar a saúde dos serviços e enviar alertas sobre qualquer anomalia.
+5. **Containerized application managed by EKS (Elastic Kubernetes Service)** using **AWS Fargate**. 
+   - **Pods running the front-end (React)**.
+   - **Pods running a Web Server (Nginx)**.
+   - **Pods managing DB connection**.
+   - **Pods managing S3 and EFS connection**.
+   - **Pods collecting logs**.
 
-9. O gerenciamento de permissões será feito com **AWS IAM** para garantir segurança e controle de acessos.
+6. The database will be migrated to **Amazon RDS (MySQL)** with Multi-AZ configuration, ensuring high availability and automatic backups.
+
+7. **AWS CodePipeline** and **AWS CodeDeploy** will be used for continuous integration and deployment (CI/CD) of the application, ensuring automation and efficiency in updates.
+
+8. **AWS CloudWatch** will be configured to monitor service health and send alerts for any anomalies.
+
+9. Permission management will be handled with **AWS IAM** to ensure security and access control.
 
 <img src="/imgs/arq_aws.png">
-Arquitetura da Fast Engineering na AWS
+Fast Engineering's AWS Architecture
 
 <img src="/imgs/arq_kubernetes.png">
-Arquitetura interna do kubernetes
+Internal Kubernetes Architecture
 
 ---
 
-## 🧰 **Serviços e Recursos Usados na Arquitetura**
+## 🧰 **Services and Resources Used in the Architecture**
 
-1. **AWS Route 53**: Serviço de gerenciamento de DNS que permite o roteamento de usuários para diferentes recursos da AWS com base em regras definidas, como a proximidade geográfica ou saúde do serviço.
-   
-2. **AWS WAF (Web Application Firewall)**: de aplicação da web que protege contra ameaças comuns da internet, como injeção de SQL, cross-site scripting (XSS), e ataques DDoS.
+1. **AWS Route 53**: DNS management service that allows routing users to different AWS resources based on defined rules, such as geographical proximity or service health.
 
-3. **Amazon CloudFront**:  Serviço de distribuição de conteúdo (CDN) que acelera a entrega de conteúdo estático ou dinâmico em todo o mundo, reduzindo a latência para os usuários finais.
+2. **AWS WAF (Web Application Firewall)**: Web application firewall that protects against common internet threats, like SQL injection, cross-site scripting (XSS), and DDoS attacks.
 
-4. **Aplication Load Balancer (ALB)**: Balanceador de carga que distribui o tráfego entre diferentes instâncias ou containers, garantindo que o tráfego seja equilibrado e as falhas sejam redirecionadas para instâncias saudáveis.
+3. **Amazon CloudFront**: Content distribution (CDN) service that accelerates the delivery of static or dynamic content globally, reducing latency for end users.
 
-5. **Amazon EKS (Elastic Kubernetes Service)**: Serviço gerenciado de Kubernetes que orquestra containers, permitindo escalabilidade, automação e implantação rápida de aplicações em microsserviços.
+4. **Application Load Balancer (ALB)**: Load balancer that distributes traffic across different instances or containers, ensuring traffic balancing and redirecting failures to healthy instances.
 
-6. **AWS Fargate**: Serviço de execução de containers serverless que elimina a necessidade de provisionar e gerenciar servidores. Com Fargate, os containers são executados sob demanda.
+5. **Amazon EKS (Elastic Kubernetes Service)**: Managed Kubernetes service that orchestrates containers, enabling scalability, automation, and quick deployment of microservice applications.
 
-7. **Amazon S3 (Simple Storage Service)**: Serviço de armazenamento escalável e seguro que permite armazenar arquivos estáticos, como imagens e vídeos, com alta durabilidade e acessibilidade.
+6. **AWS Fargate**: Serverless container execution service that eliminates the need to provision and manage servers. Containers run on demand with Fargate.
 
-8. **Amazon EFS (Elastic File System)**: Sistema de arquivos compartilhado que permite que várias instâncias ou containers acessem o mesmo sistema de arquivos simultaneamente, ideal para cenários onde há compartilhamento de dados.
+7. **Amazon S3 (Simple Storage Service)**: Scalable and secure storage service that allows static file storage, like images and videos, with high durability and accessibility.
 
-9. **Amazon RDS (MySQL)**: Banco de dados relacional gerenciado que permite a configuração de alta disponibilidade (Multi-AZ) e backups automáticos para garantir redundância e recuperação rápida em caso de falhas.
+8. **Amazon EFS (Elastic File System)**: Shared file system allowing multiple instances or containers to access the same file system simultaneously, ideal for data-sharing scenarios.
 
-10. **AWS CodePipeline e AWS CodeDeploy**: Serviços de integração contínua (CI) e entrega contínua (CD) que automatizam os processos de build, teste e deploy da aplicação.
+9. **Amazon RDS (MySQL)**: Managed relational database allowing high availability configuration (Multi-AZ) and automatic backups for redundancy and quick recovery in case of failure.
 
-11. **AWS CloudWatch**: Serviço de monitoramento que coleta e rastreia métricas, registros e eventos da AWS, enviando alertas e permitindo o acompanhamento da saúde e performance da infraestrutura.
+10. **AWS CodePipeline and AWS CodeDeploy**: Continuous integration (CI) and continuous delivery (CD) services that automate the processes of building, testing, and deploying the application.
 
-12. **AWS IAM (Identity and Access Management)**: Serviço de gerenciamento de identidades que permite definir permissões granulares para acessar e gerenciar recursos da AWS de forma segura.
+11. **AWS CloudWatch**: Monitoring service that collects and tracks metrics, logs, and events from AWS, sending alerts and enabling health and performance tracking for the infrastructure.
 
----
-
-## 🔧 **Implantação**
-
-### Pré-requisitos
-
-1. **Conta AWS configurada**
-2. **AWS CLI** instalado e configurado
-3. **kubectl** configurado para acessar seu cluster EKS
-4. **IAM roles** com permissões adequadas
-5. **Docker** instalado para construir as imagens
-
-### 1. Configuração do Repositório e CI/CD
-
-#### 1.1. Criar Repositório no AWS CodeCommit
-- Acesse o AWS Console, navegue até o **CodeCommit** e crie um novo repositório.
-- Clone o repositório em sua máquina local:
-  ```bash
-  git clone https://git-codecommit.REGION.amazonaws.com/v1/repos/NOME_DO_REPOSITORIO
-  ```
-
-#### 1.2. Definir Pipeline no AWS CodePipeline
-- Navegue para o **CodePipeline** e crie um novo pipeline.
-- Escolha o repositório CodeCommit criado anteriormente como fonte.
-- Configure as fases de **CodeBuild** para construir o frontend e o backend e **CodeDeploy** para implantar as imagens no cluster EKS.
-
-#### 1.3. Configurar CodeBuild
-- Crie um **buildspec.yml** para definir as etapas de construção de cada componente.
-
-### 2. Configuração do EKS e Fargate
-
-#### 2.1. Criar Cluster EKS
-- Use o **eksctl** para criar o cluster EKS com suporte a Fargate.
-  ```bash
-  eksctl create cluster     --name ecommerce-cluster     --region us-east-1     --fargate
-  ```
-
-#### 2.2. Configurar Fargate Profiles
-- Crie um profile Fargate para associar seus pods ao serviço Fargate.
-  ```bash
-  eksctl create fargateprofile     --cluster ecommerce-cluster     --name ecommerce-app     --namespace default
-  ```
-
-#### 2.3. Deploy dos Serviços no EKS
-- Crie arquivos **YAML** para definir os serviços do Kubernetes (Deployment, Service, ConfigMap, etc.).
-- Arquivo `deployment-backend.yaml` para o servidor web:
-- Para aplicar o deployment:
-  ```bash
-  kubectl apply -f deployment-backend.yaml
-  ```
-
-### 3. Configuração do Banco de Dados RDS MySQL
-
-#### 3.1. Criar Instância RDS
-- Acesse o console RDS e crie uma nova instância MySQL.
-  - Escolha a versão MySQL adequada.
-  - Configure as VPCs, subnets e segurança para permitir a comunicação com o EKS.
-- Configure o endpoint do banco de dados no arquivo de configuração da aplicação.
-
-#### 3.2. Configurar Variáveis de Ambiente
-- No seu arquivo de configuração **ConfigMap** ou diretamente no deployment:
-
-### 4. Configuração do S3 e EFS
-
-#### 4.1. Criar Bucket no S3
-- Crie um bucket no **S3** para armazenar arquivos estáticos e imagens do e-commerce.
-- No código da aplicação, use o SDK da AWS para interagir com o S3 e fazer upload/download dos arquivos.
-
-#### 4.2. Montar EFS no EKS
-- Crie um sistema de arquivos **EFS** no console da AWS.
-- Configure um **PersistentVolume** e um **PersistentVolumeClaim** no Kubernetes:
-
-### 5. Configuração de Logs e Monitoramento
-
-#### 5.1. Configurar CloudWatch Logs
-- Habilite o envio de logs dos containers no EKS para o **CloudWatch**.
-- Adicione a seguinte configuração nos deployments:
-
-### 6. Finalizando a Implantação
-
-Após configurar todos os recursos acima, o pipeline de CI/CD garantirá que o código seja automaticamente construído, testado e implantado no cluster EKS. Cada alteração no repositório CodeCommit acionará o pipeline.
+12. **AWS IAM (Identity and Access Management)**: Identity management service that allows defining granular permissions to access and manage AWS resources securely.
 
 ---
 
-## 💰 **Orçamento**
+## 💰 **Budget**
 
-### Estimativa de custo da nova arquitetura
+### Cost Estimate for the New Architecture
 
-- [Link da Calculadora AWS](https://calculator.aws/#/estimate?id=eddd7d07382facf5f41f637a4d8dfc3b31f629a5)
+- [AWS Calculator Link](https://calculator.aws/#/estimate?id=eddd7d07382facf5f41f637a4d8dfc3b31f629a5)
 
 <img src="/imgs/princing_calculator.png">
-Estimativa de custo da nova arquitetura
+Cost Estimate for the New Architecture
 
-- Custo mensal: 2.016,31 USD
+- Monthly cost: 2,016.31 USD
 
-- Custo total de 12 meses: 24.195,72 USD
-
----
-
-## 📬 **Cronograma**
-<!-- Dividir o cronograma da migração por etapas -->
-A ser anexado.
+- Total 12-month cost: 24,195.72 USD
 
 ---
 
-## 📑 **Referências**
+## 📬 **Timeline**
+<!-- Divide the migration timeline by stages -->
+To be attached.
+
+---
+
+## 📑 **References**
 - [AWS Route 53](https://aws.amazon.com/route53/)
 - [AWS WAF](https://aws.amazon.com/waf/)
 - [Amazon CloudFront](https://aws.amazon.com/cloudfront/)
